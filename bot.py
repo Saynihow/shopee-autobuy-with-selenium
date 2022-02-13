@@ -1,3 +1,4 @@
+from datetime import datetime
 from login import email,password,phone,cookie
 from selenium.webdriver.chrome import options
 from selenium.webdriver.common.by import By
@@ -6,14 +7,13 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 import undetected_chromedriver as UC
 
-product_url = input("Enter Product URL: ")
+# product_url = input("Enter Product URL: ")
 # or you can replace product url here
-# product_url = "https://shopee.co.id/Erigo-Sweatshirt-Zuka-Olive-i.30203584.3269062541"
+product_url = "https://shopee.tw/product-i.11527054.15736618630"  # TODO change this
 
 UC.TARGET_VERSION = 92
 options = UC.ChromeOptions()
 options.add_argument('--disable-extensions')
-driver = UC.Chrome(options=options)
 
 def loginWithEmail():
     driver.get("https://shopee.co.id/buyer/login")
@@ -62,22 +62,22 @@ def loginWithHandphone():
     with open('cookie.txt', 'w') as f:
         f.write(driver.get_cookies())
 
-def loginWithCookie():
-    driver.get("https://shopee.co.id")
+def loginWithCookie(driver):
+    driver.get("https://shopee.tw")
     driver.add_cookie({'name': 'SPC_EC', 'value': cookie})
     driver.get_cookies()
     time.sleep(3)
     print("Login with Cookie Successful")
 
-def buyProduct():
-    variant_option = WebDriverWait(driver, 600).until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(),'S')]")))
+def buyProduct(driver):
+    variant_option = WebDriverWait(driver, 600).until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(),'撫子色')]")))  # TODO change this
     driver.execute_script("arguments[0].click();", variant_option)
 
-    buy_button = WebDriverWait(driver, 600).until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'button.btn.btn-solid-primary.btn--l._3Kiuzg')))
+    buy_button = WebDriverWait(driver, 600).until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'button.btn.btn-solid-primary.btn--l.rvHxix')))
     driver.execute_script("arguments[0].click();", buy_button)
     print("Product has added to cart")
 
-    checkout_button = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#main > div > div:nth-child(2) > div.pcmall-cart_2wCr9z > div > div:nth-child(3) > div.pcmall-cart_1XDN4G > div.pcmall-cart_3D7IN3.pcmall-cart_3VPKeL > button.shopee-button-solid.shopee-button-solid--primary')))
+    checkout_button = WebDriverWait(driver, 600).until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'button.shopee-button-solid.shopee-button-solid--primary')))
     driver.execute_script("arguments[0].click();", checkout_button)
     print("Checkout Cart")
 
@@ -90,12 +90,25 @@ def buyProduct():
     print("Using ShopeePay Payment Method")
     """
 
-    # use this if you want to use Bank BRI(auto) Payment Method
-    payment_method = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'div.checkout-payment-setting__payment-methods-tab > span:nth-child(2) > button')))
-    driver.execute_script("arguments[0].click();", payment_method)
-    payment_option = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'div.bank-transfer-category__body > div:nth-child(5) > div > div.stardust-radio-button > div > div')))
-    driver.execute_script("arguments[0].click();", payment_option)
-    print("Using Bank BRI(auto) Payment Method")
+
+    pay_method_variant_option = WebDriverWait(driver, 900).until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(),'信用卡/金融卡')]")))
+    driver.execute_script("arguments[0].click();", pay_method_variant_option)
+    print("select pay method")
+
+    credit_card_variant_option = WebDriverWait(driver, 900).until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(),'台新國際商業銀行')]")))
+    driver.execute_script("arguments[0].click();", credit_card_variant_option)
+    print("select credit card")
+
+    order_button = WebDriverWait(driver, 900).until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'button.stardust-button.stardust-button--primary.stardust-button--large._1qSlAe')))
+    driver.execute_script("arguments[0].click();", order_button)
+    print("Order created")
+
+    # # use this if you want to use Bank BRI(auto) Payment Method
+    # payment_method = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'div.checkout-payment-setting__payment-methods-tab > span:nth-child(2) > button')))
+    # driver.execute_script("arguments[0].click();", payment_method)
+    # payment_option = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'div.bank-transfer-category__body > div:nth-child(5) > div > div.stardust-radio-button > div > div')))
+    # driver.execute_script("arguments[0].click();", payment_option)
+    # print("Using Bank BRI(auto) Payment Method")
 
     """
     # use this if you want to use Bank Mandiri(auto) Payment Method
@@ -124,40 +137,53 @@ def buyProduct():
     print("Using Bank BNI(auto) Payment Method")
     """
     
-    order_button = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#main > div > div._193wCc > div._1WlhIE > div.f23wB9 > div.PC1-mc > div._3swGZ9 > button')))
-    driver.execute_script("arguments[0].click();", order_button)
-    print("Order has been created")
+    # order_button = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#main > div > div._193wCc > div._1WlhIE > div.f23wB9 > div.PC1-mc > div._3swGZ9 > button')))
+    # driver.execute_script("arguments[0].click();", order_button)
+    # print("Order has been created")
 
 def getSecond(time_str):
     h, m, s = time_str.split(':')
     return int(h) * 3600 + int(m) * 60 + int(s)
 
 def main():
+    driver = UC.Chrome(options=options)
+
     # use this if you want to login with email-password ->
-    loginWithEmail()
+    # loginWithEmail()
     # use this if you want to login with phone -> loginWithHandphone()
-    # use this if you have cookie -> loginWithCookie()
+    loginWithCookie(driver)
 
     hour_now = int(time.strftime("%H", time.localtime()))
     minute_now = int(time.strftime("%M", time.localtime()))
     second_now = int(time.strftime("%S", time.localtime()))
     driver.get(product_url)
-    hour_buy = int(input("Enter Hour to Buy Product: "))
-    minute_buy = int(input("Enter Minute to Buy Product: "))
-    time_str = str(hour_buy) + ":" + str(minute_buy) + ":" + str(0)
-    time_str_now = str(hour_now) + ":" + str(minute_now) + ":" + str(second_now)
-    time_sleep = getSecond(time_str) - getSecond(time_str_now) - 60
+    # hour_buy = int(input("Enter Hour to Buy Product: "))
+    buy_time_s = str(input("Enter time (%Y-%m-%d %H:%M:%S) to Buy Product: "))
+    # time_str = str(hour_buy) + ":" + str(minute_buy) + ":" + str(0)
+    time_to_buy = datetime.strptime(buy_time_s, '%Y-%m-%d %H:%M:%S')
+    time_now = datetime.now()
+    # time_sleep = getSecond(time_str) - getSecond(time_str_now) - 60
     
-    print("Wait until the time to buy")
-    if (time_sleep > 0):
-        time.sleep(time_sleep)
-
-    print("Prepare time. Refreshing browser")
-    while minute_now != minute_buy:
-        minute_now = int(time.strftime("%M", time.localtime()))
+    # print("Wait until the time to buy")
+    # if (time_sleep > 0):
+    #     time.sleep(time_sleep)
+    print(f'{time_to_buy=}')
+    print(f'{time_now=}')
+    remaining_seconds = (time_to_buy - time_now).total_seconds()
+    if remaining_seconds > 60:
+        time.sleep(remaining_seconds - 60)
+        print("Prepare time. Refreshing browser")
         driver.refresh()
 
-    buyProduct()
+    remaining_seconds_2 = (time_to_buy - datetime.now()).total_seconds()
+    time.sleep(remaining_seconds_2)
+
+    # print("Prepare time. Refreshing browser")
+    # while minute_now != minute_buy:
+    #     minute_now = int(time.strftime("%M", time.localtime()))
+    #     driver.refresh()
+
+    buyProduct(driver)
 
 if __name__ == "__main__":
     main()

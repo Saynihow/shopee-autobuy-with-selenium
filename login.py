@@ -1,5 +1,4 @@
 email="YOUR_EMAIL"
 password="YOUR_PASSWORD"
 phone="YOUR_PHONE_NUMBER"
-
-cookie = 'YOUR_COOKIE'
+cookie = 'VUtvUms5WTdSWlF5VWFiNftEmqLraNSp0V3FfQaoqulq8luKnizBn0H1tHg5iU1JFCLSb/f3vzqxFB04l+OL+J4/Ib1SrhjRvEmlYph0VCsBPAk8Y5XxB1FI+B8cpMWeyH4CrBnHn5sEI5a5556yznZOCeLkqsxr04b3IliOxyY='
