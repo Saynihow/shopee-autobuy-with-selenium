@@ -36,10 +36,11 @@ H --> I((End))
 
 ## How To Use
 
-Install **Selenium** and **Undetected Chromedriver** library
+    virtualenv {your env name} --python=python3.8
 
-    pip install selenium undetected-chromedriver
-or
+    source {your env name}/bin/activate
+
+Install **Selenium** and **Undetected Chromedriver** library
 
     pip install -r requirements.txt
 
